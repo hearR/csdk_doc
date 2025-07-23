@@ -165,7 +165,9 @@ qosa_datacall_attach_stat_e枚举值
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - 函数原型
 
-    ``qosa_bool_t qosa_datacall_wait_attached(qosa_uint8_t simid, qosa_uint32_t timeout)``
+.. code-block:: c
+
+    qosa_bool_t qosa_datacall_wait_attached(qosa_uint8_t simid, qosa_uint32_t timeout)
 
 - 功能描述
     执行时判断当前网络是否注册成功，如果当前没有注册成功，则等待一段时间返回网络注册结果。
@@ -210,7 +212,9 @@ qosa_datacall_attach_stat_e枚举值
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - 函数原型
 
-    ``qosa_bool_t qosa_datacall_is_defined(qosa_uint8_t simid, qosa_uint8_t pdpid)``
+.. code-block:: c
+
+    qosa_bool_t qosa_datacall_is_defined(qosa_uint8_t simid, qosa_uint8_t pdpid)
 
 - 功能描述
     查询一个指定的PDP是否为已定义状态。
@@ -252,7 +256,9 @@ qosa_datacall_attach_stat_e枚举值
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - 函数原型
 
-    ``qosa_datacall_errno_e qosa_datacall_set_pdp_context(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_pdp_context_t* pdp_ctx)``
+.. code-block:: c
+
+    qosa_datacall_errno_e qosa_datacall_set_pdp_context(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_pdp_context_t* pdp_ctx)
 
 - 功能描述
     查询一个指定的PDP是否为已定义状态。
@@ -346,7 +352,9 @@ qosa_datacall_attach_stat_e枚举值
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - 函数原型
 
-    ``qosa_datacall_errno_e qosa_datacall_delete_pdp_context(qosa_uint8_t simid, qosa_uint8_t pdpid)``
+.. code-block:: c
+
+    qosa_datacall_errno_e qosa_datacall_delete_pdp_context(qosa_uint8_t simid, qosa_uint8_t pdpid)
 
 - 功能描述
     删除特定PDP的PDP context。
@@ -388,7 +396,9 @@ qosa_datacall_attach_stat_e枚举值
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - 函数原型
 
-    ``qosa_datacall_errno_e qosa_datacall_get_pdp_context(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_pdp_context_t* pdp_ctx)``
+.. code-block:: c
+
+    qosa_datacall_errno_e qosa_datacall_get_pdp_context(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_pdp_context_t* pdp_ctx)
 
 - 功能描述
     获取特定PDP的PDP context。
@@ -437,7 +447,9 @@ qosa_pdp_context_t结构体含义参考 :ref:`qosa_pdp_context_t`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - 函数原型
 
-    ``qosa_datacall_errno_e qosa_datacall_set_pdp_auth(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_pdp_auth_context_t* auth_ctx)``
+.. code-block:: c
+
+    qosa_datacall_errno_e qosa_datacall_set_pdp_auth(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_pdp_auth_context_t* auth_ctx)
 
 - 功能描述
     设置特定PDP的PDP auth context。
@@ -501,7 +513,9 @@ qosa_pdp_context_t结构体含义参考 :ref:`qosa_pdp_context_t`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - 函数原型
 
-    ``qosa_datacall_errno_e qosa_datacall_get_pdp_auth(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_pdp_auth_context_t* auth_ctx)``
+.. code-block:: c
+
+    qosa_datacall_errno_e qosa_datacall_get_pdp_auth(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_pdp_auth_context_t* auth_ctx)
 
 - 功能描述
     获取特定PDP的PDP auth context。
@@ -551,7 +565,9 @@ qosa_pdp_auth_context_t结构体含义参考 :ref:`qosa_pdp_auth_context_t`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - 函数原型
 
-    ``qosa_datacall_errno_e qosa_datacall_set_pdp_qos(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_pdp_qos_profile_t* qos_profile)``
+.. code-block:: c
+    
+    qosa_datacall_errno_e qosa_datacall_set_pdp_qos(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_pdp_qos_profile_t* qos_profile)
 
 - 功能描述
     定义特定PDP的QoS profile。
@@ -614,7 +630,9 @@ qosa_pdp_auth_context_t结构体含义参考 :ref:`qosa_pdp_auth_context_t`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - 函数原型
 
-    ``qosa_datacall_errno_e qosa_datacall_get_pdp_qos(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_pdp_qos_profile_t* qos_profile)``
+.. code-block:: c
+
+    qosa_datacall_errno_e qosa_datacall_get_pdp_qos(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_pdp_qos_profile_t* qos_profile)
 
 - 功能描述
     获取特定PDP的QoS profile.
@@ -669,7 +687,9 @@ qosa_pdp_qos_profile_t结构体含义参考 :ref:`qosa_pdp_qos_profile_t`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - 函数原型
 
-    ``qosa_datacall_errno_e qosa_datacall_get_dns_addr(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_datacall_dns_t* dns)``
+.. code-block:: c
+
+    qosa_datacall_errno_e qosa_datacall_get_dns_addr(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_datacall_dns_t* dns)
 
 - 功能描述
     获取dns服务器IP地址.
@@ -731,7 +751,9 @@ qosa_pdp_qos_profile_t结构体含义参考 :ref:`qosa_pdp_qos_profile_t`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - 函数原型
 
-    ``qosa_datacall_errno_e qosa_datacall_set_dns_addr(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_datacall_dns_t* dns)``
+.. code-block:: c
+
+    qosa_datacall_errno_e qosa_datacall_set_dns_addr(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_datacall_dns_t* dns)
 
 - 功能描述
     设置dns服务器IP地址.
@@ -784,7 +806,9 @@ qosa_datacall_dns_t结构体含义参考 :ref:`qosa_datacall_dns_t`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - 函数原型
 
-    ``qosa_datacall_conn_t qosa_datacall_conn_new(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_datacall_conn_type_e conn_type)``
+.. code-block:: c
+
+    qosa_datacall_conn_t qosa_datacall_conn_new(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_datacall_conn_type_e conn_type)
 
 - 功能描述
     生成一个特定功能域的连接对象.
@@ -845,7 +869,9 @@ qosa_datacall_dns_t结构体含义参考 :ref:`qosa_datacall_dns_t`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - 函数原型
 
-    ``qosa_datacall_errno_e qosa_datacall_start(qosa_datacall_conn_t conn, qosa_uint32_t max_wait_time)``
+.. code-block:: c
+
+    qosa_datacall_errno_e qosa_datacall_start(qosa_datacall_conn_t conn, qosa_uint32_t max_wait_time)
 
 - 功能描述
     打开特定datacall连接对象(同步).
@@ -894,7 +920,9 @@ qosa_datacall_dns_t结构体含义参考 :ref:`qosa_datacall_dns_t`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - 函数原型
 
-    ``qosa_datacall_errno_e qosa_datacall_start_async(qosa_datacall_conn_t conn, qosa_uint32_t max_wait_time, datacall_callback_cb_ptr cb, void* ctx)``
+.. code-block:: c
+
+    qosa_datacall_errno_e qosa_datacall_start_async(qosa_datacall_conn_t conn, qosa_uint32_t max_wait_time, datacall_callback_cb_ptr cb, void* ctx)
 
 - 功能描述
     打开特定datacall连接对象(异步接口).
@@ -955,7 +983,9 @@ qosa_datacall_dns_t结构体含义参考 :ref:`qosa_datacall_dns_t`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - 函数原型
 
-    ``qosa_datacall_errno_e qosa_datacall_stop(qosa_datacall_conn_t conn, qosa_uint32_t max_wait_time)``
+.. code-block:: c
+
+    qosa_datacall_errno_e qosa_datacall_stop(qosa_datacall_conn_t conn, qosa_uint32_t max_wait_time)
 
 - 功能描述
     关闭特定datacall连接对象(同步接口).
@@ -997,7 +1027,9 @@ qosa_datacall_dns_t结构体含义参考 :ref:`qosa_datacall_dns_t`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - 函数原型
 
-    ``qosa_datacall_errno_e qosa_datacall_stop_async(qosa_datacall_conn_t conn, qosa_uint32_t max_wait_time, datacall_callback_cb_ptr cb, void* ctx)``
+.. code-block:: c
+
+    qosa_datacall_errno_e qosa_datacall_stop_async(qosa_datacall_conn_t conn, qosa_uint32_t max_wait_time, datacall_callback_cb_ptr cb, void* ctx)
 
 - 功能描述
     关闭特定datacall连接对象(异步接口).
@@ -1050,7 +1082,9 @@ qosa_datacall_dns_t结构体含义参考 :ref:`qosa_datacall_dns_t`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - 函数原型
 
-    ``qosa_bool_t qosa_datacall_get_status(qosa_datacall_conn_t conn)``
+.. code-block:: c
+
+    qosa_bool_t qosa_datacall_get_status(qosa_datacall_conn_t conn)
 
 - 功能描述
     获取特定datacall连接对象的连接状态.
@@ -1087,7 +1121,9 @@ qosa_datacall_dns_t结构体含义参考 :ref:`qosa_datacall_dns_t`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - 函数原型
 
-    ``qosa_datacall_errno_e qosa_datacall_get_ip_info(qosa_datacall_conn_t conn, qosa_datacall_ip_info_t* info)``
+.. code-block:: c
+
+    qosa_datacall_errno_e qosa_datacall_get_ip_info(qosa_datacall_conn_t conn, qosa_datacall_ip_info_t* info)
 
 - 功能描述
     获取特定datacall连接对象的详细信息.
@@ -1133,7 +1169,9 @@ qosa_datacall_dns_t结构体含义参考 :ref:`qosa_datacall_dns_t`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - 函数原型
 
-    ``qosa_datacall_errno_e qosa_datacall_get_traffic_statistics(qosa_uint8_t simid, qosa_datacall_traffic_statistics_t* traffic_statistics)``
+.. code-block:: c
+
+    qosa_datacall_errno_e qosa_datacall_get_traffic_statistics(qosa_uint8_t simid, qosa_datacall_traffic_statistics_t* traffic_statistics)
 
 - 功能描述
     获取上下行流量统计信息.
@@ -1188,7 +1226,9 @@ qosa_datacall_dns_t结构体含义参考 :ref:`qosa_datacall_dns_t`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - 函数原型
 
-    ``qosa_datacall_errno_e qosa_datacall_clear_traffic_statistics(qosa_uint8_t simid)``
+.. code-block:: c
+
+    qosa_datacall_errno_e qosa_datacall_clear_traffic_statistics(qosa_uint8_t simid)
 
 - 功能描述
     清除上下行流量统计信息.
@@ -1225,7 +1265,9 @@ qosa_datacall_dns_t结构体含义参考 :ref:`qosa_datacall_dns_t`
 
 - 函数原型
 
-    ``qosa_datacall_errno_e qosa_datacall_save_traffic_statistics(qosa_uint8_t simid)``
+.. code-block:: c
+
+    qosa_datacall_errno_e qosa_datacall_save_traffic_statistics(qosa_uint8_t simid)
 
 - 功能描述
     保存上下行流量信息到NV中.
@@ -1264,7 +1306,9 @@ qosa_datacall_dns_t结构体含义参考 :ref:`qosa_datacall_dns_t`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - 函数原型
 
-    ``qosa_datacall_errno_e qosa_datacall_set_pdp_timer(qosa_uint8_t simid, qosa_uint8_t rat, qosa_uint8_t procedure, qosa_datacall_pdp_timer_t* pdp_timer)``
+.. code-block:: c
+
+    qosa_datacall_errno_e qosa_datacall_set_pdp_timer(qosa_uint8_t simid, qosa_uint8_t rat, qosa_uint8_t procedure, qosa_datacall_pdp_timer_t* pdp_timer)
 
 - 功能描述
     配置PDP激活/去激活定时器配置.
@@ -1345,7 +1389,9 @@ qosa_datacall_dns_t结构体含义参考 :ref:`qosa_datacall_dns_t`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - 函数原型
 
-    ``qosa_datacall_errno_e qosa_datacall_get_pdp_timer(qosa_uint8_t simid, qosa_uint8_t rat, qosa_uint8_t procedure, qosa_datacall_pdp_timer_t* pdp_timer)``
+.. code-block:: c
+
+    qosa_datacall_errno_e qosa_datacall_get_pdp_timer(qosa_uint8_t simid, qosa_uint8_t rat, qosa_uint8_t procedure, qosa_datacall_pdp_timer_t* pdp_timer)
 
 - 功能描述
     获取PDP激活/去激活定时器配置信息.
