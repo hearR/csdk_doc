@@ -1,0 +1,803 @@
+[1mdiff --git a/docs/source/system/network-comm/index.rst b/docs/source/system/network-comm/index.rst[m
+[1mindex a31a013..ab59730 100644[m
+[1m--- a/docs/source/system/network-comm/index.rst[m
+[1m+++ b/docs/source/system/network-comm/index.rst[m
+[36m@@ -2,11 +2,68 @@[m
+ datacall[m
+ ========[m
+ [m
+[31m-此模块包含了PDP Context配置和获取、激活、去激活以及获取模组的IP信息等功能。[m
+[32m+[m[32m--------------------[m[41m[m
+[32m+[m[32mPDP概述[m[41m[m
+[32m+[m[32m--------------------[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32mPDP（Packet Data Protocol）是蜂窝网络中用于数据传输的基础协议，类似于传统互联网中的IP协议。它的主要作用是在蜂窝网络与外部数据网络（如互联网）之间建立数据连接通道。PDP通过定义连接的参数，确保数据可以顺利地从用户设备传输到网络和互联网。[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[41m[m
+[32m+[m[32m1 PDP的基本概念[m[41m[m
+[32m+[m[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32mPDP（包数据协议）是蜂窝网络中用于数据传输的一种协议。它负责设备与外部数据网络（如互联网、私有网络等）之间的数据连接。PDP的作用类似于传统互联网中的IP协议，通过管理和配置连接参数来确保数据在网络中的传输。PDP主要依赖于“PDP Context”，它是设备与网络之间协商数据传输的一组参数配置模板。[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32mPDP包括以下几个基本要素：[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m1. PDP Context：配置数据连接所需的一组参数，定义了数据连接的具体行为。包括但不限于：[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m - APN（接入点名称）[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m - IP地址类型（如IPv4或IPv6）[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m - 数据传输模式（如网络类型2G、3G、4G等）[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m2. PDP激活：设备连接到蜂窝网络后，通过PDP激活流程获取一个有效的IP地址。通过PDP协议，设备可以访问互联网或其他网络服务。[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m3. PDP地址：通过PDP激活过程，设备获得一个IP地址，这个IP地址将用于数据通信。[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[41m[m
+[32m+[m[32m2 DataCall流程概述[m[41m[m
+[32m+[m[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32mDataCall是指通信模块在蜂窝网络中建立数据连接的过程。这个过程主要是为了使设备能够通过运营商的蜂窝网络接入互联网或其他私有网络。DataCall流程中的核心任务是通过PDP激活来获取IP地址，并在设备与外部网络之间建立稳定的数据传输通道。[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32mDataCall的流程通常包含以下几个步骤：[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m1. 设备接入运营商网络：[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m - 设备通过蜂窝模块与运营商的网络连接，通常通过移动设备上的SIM卡认证，获得与运营商的网络连接。[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m2. PDP激活：[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m - 设备向网络发送PDP激活请求，网络根据设备的请求配置PDP Context，并分配一个IP地址。PDP Context包括如APN、IP类型等连接信息。[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m - 设备一旦成功激活PDP，就可以获取到IP地址。[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m3. 建立数据连接：[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m - 设备使用获得的IP地址，通过TCP/IP等协议进行数据通信，能够访问互联网、传输数据或进行其他网络服务。[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m4. 数据传输：[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m - 一旦建立了数据连接，设备就可以通过运营商的网络进行数据传输，支持各种应用如浏览网页、发送邮件、进行实时通信等。[m[41m[m
+ [m
+[31m-DataCall是通信模块建立数据连接的过程，目的是让设备通过运营商的蜂窝网络接入互联网或私有网络。[m
+[32m+[m[32m5. 数据连接断开：[m[41m[m
+ [m
+[31m-设备接入运营商网络之后，通过pdp激活流程得到运营商下发的IP地址。设备使用该IP地址，可用于TCP,UDP,HTTP,MQTT等网络协议栈业务的通信。[m
+[32m+[m[32m - 当设备不再需要继续进行数据传输时，可以通过PDP去激活或删除PDP Context，断开数据连接。[m[41m[m
+[32m+[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m简而言之，PDP协议通过定义网络连接的行为和参数，而DataCall流程通过PDP激活为设备提供了一个有效的网络连接，从而使设备能够进行数据传输。[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[41m[m
+[32m+[m[32mDataCall 函数列表[m[41m[m
+[32m+[m[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[41m[m
+ [m
+ .. list-table:: DataCall 函数列表[m
+    :widths: 30 70[m
+[36m@@ -15,7 +72,7 @@[m [mDataCall是通信模块建立数据连接的过程，目的是让设备通过运[m
+    * - 函数[m
+      - 描述[m
+    * - qosa_datacall_attach[m
+[31m-     - 激活或者去激活网络[m
+[32m+[m[32m     - 注册或者反注册网络[m[41m[m
+    * - qosa_datacall_wait_attached[m
+      - 等待注网成功[m
+    * - qosa_datacall_is_defined[m
+[36m@@ -68,10 +125,13 @@[m [mDataCall是通信模块建立数据连接的过程，目的是让设备通过运[m
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m
+ - 函数原型[m
+ [m
+[31m-    ``qosa_datacall_errno_e qosa_datacall_attach(qosa_uint8_t simid, qosa_uint8_t method, datacall_callback_cb_ptr cb, void* ctx)``[m
+[32m+[m[32m.. code-block:: c[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m    qosa_datacall_errno_e qosa_datacall_attach(qosa_uint8_t simid, qosa_uint8_t method, datacall_callback_cb_ptr cb, void* ctx)[m[41m[m
+ [m
+ - 功能描述[m
+[31m-    注册或者反注册网络。[m
+[32m+[m[41m[m
+[32m+[m[32m  注册或者反注册网络。设备只有在运营商网络注册成功之后，才可通过PDP的激活流程来获取运营商下发的IP地址。设备反注册成功网络之后，相当于在运营商网络中下线，同时设备之前获取到的IP地址也都会消失。[m[41m[m
+ [m
+ - 参数说明[m
+ [m
+[36m@@ -108,9 +168,11 @@[m [mDataCall是通信模块建立数据连接的过程，目的是让设备通过运[m
+      - 无[m
+      - 扩展参数[m
+ [m
+[31m-qosa_datacall_attach_stat_e枚举值[m
+[32m+[m[32m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[m[41m[m
+[32m+[m[32m1.1.1 qosa_datacall_attach_stat_e[m[41m[m
+[32m+[m[32m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[m[41m[m
+ [m
+[31m-.. code:: c[m
+[32m+[m[32m.. code-block:: c[m[41m[m
+ [m
+     typedef enum[m
+     {[m
+[36m@@ -118,7 +180,7 @@[m [mqosa_datacall_attach_stat_e枚举值[m
+       QOSA_DATACALL_ATTACH, [m
+     } qosa_datacall_attach_stat_e;[m
+ [m
+[31m-.. list-table:: DataCall qosa_datacall_attach_stat_e枚举值说明[m
+[32m+[m[32m.. list-table:: qosa_datacall_attach_stat_e枚举值说明[m[41m[m
+    :header-rows: 1[m
+ [m
+    * - 枚举值[m
+[36m@@ -133,14 +195,8 @@[m [mqosa_datacall_attach_stat_e枚举值[m
+ [m
+     函数执行成功返回 ``QOSA_DATACALL_OK``，否则返回其他qosa_datacall_errno_e枚举类型的枚举值。[m
+ [m
+[31m-- 使用注意事项[m
+[31m-[m
+[31m-    该函数为异步函数。[m
+[31m-[m
+[31m-.. _qosa_datacall_errno_e:[m
+[31m-[m
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[m
+[31m-1.1.1 qosa_datacall_errno_e[m
+[32m+[m[32m1.1.2 qosa_datacall_errno_e[m[41m[m
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[m
+ 对应qosa_datacall_errno_e错误返回值有以下几种情况：[m
+ [m
+[36m@@ -160,6 +216,14 @@[m [mqosa_datacall_attach_stat_e枚举值[m
+        QOSA_DATACALL_ERR_PDP_NO_DEFINED,                   /*!< PDP未定义错误 */[m
+    } qosa_datacall_errno_e;[m
+ [m
+[32m+[m[32m- 使用注意事项[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m    该函数为异步函数。[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m.. _qosa_datacall_errno_e:[m[41m[m
+[32m+[m[41m[m
+[32m+[m[41m[m
+[32m+[m[41m[m
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m
+ 1.2 qosa_datacall_wait_attached[m
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m
+[36m@@ -170,7 +234,8 @@[m [mqosa_datacall_attach_stat_e枚举值[m
+     qosa_bool_t qosa_datacall_wait_attached(qosa_uint8_t simid, qosa_uint32_t timeout)[m
+ [m
+ - 功能描述[m
+[31m-    执行时判断当前网络是否注册成功，如果当前没有注册成功，则等待一段时间返回网络注册结果。[m
+[32m+[m[41m[m
+[32m+[m[32m  执行时判断当前网络是否注册成功，如果当前没有注册成功，则会等待timeout的时间，如果这段时间内仍然没有注册成功，则返回false，如果期间注册网络成功，则会立即返回true。[m[41m[m
+ [m
+ - 参数说明[m
+ [m
+[36m@@ -217,7 +282,8 @@[m [mqosa_datacall_attach_stat_e枚举值[m
+     qosa_bool_t qosa_datacall_is_defined(qosa_uint8_t simid, qosa_uint8_t pdpid)[m
+ [m
+ - 功能描述[m
+[31m-    查询一个指定的PDP是否为已定义状态。[m
+[32m+[m[41m[m
+[32m+[m[32m  查询一个指定的PDP是否为已定义状态。已定义状态: 若用户侧配置了该PDP的PDP上下文参数、PDP鉴权参数、PDP QoS参数, 视为用户侧定义。[m[41m[m
+ [m
+ - 参数说明[m
+ [m
+[36m@@ -239,7 +305,7 @@[m [mqosa_datacall_attach_stat_e枚举值[m
+    * - pdpid[m
+      - qosa_uint8_t[m
+      - 是[m
+[31m-     - 0-15[m
+[32m+[m[32m     - 1-15[m[41m[m
+      - PDP ID[m
+ [m
+ - 返回值说明[m
+[36m@@ -248,7 +314,7 @@[m [mqosa_datacall_attach_stat_e枚举值[m
+ [m
+ - 使用注意事项[m
+ [m
+[31m-    已定义状态: 用户侧配置了该PDP的profile, 视为用户侧定义。[m
+[32m+[m[32m    无。[m[41m[m
+ [m
+ [m
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m
+[36m@@ -261,7 +327,8 @@[m [mqosa_datacall_attach_stat_e枚举值[m
+     qosa_datacall_errno_e qosa_datacall_set_pdp_context(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_pdp_context_t* pdp_ctx)[m
+ [m
+ - 功能描述[m
+[31m-    查询一个指定的PDP是否为已定义状态。[m
+[32m+[m[41m[m
+[32m+[m[32m  设置某个PDP ID的PDP context，用于定义数据连接的具体行为。[m[41m[m
+ [m
+ - 参数说明[m
+ [m
+[36m@@ -283,7 +350,7 @@[m [mqosa_datacall_attach_stat_e枚举值[m
+    * - pdpid[m
+      - qosa_uint8_t[m
+      - 是[m
+[31m-     - 0-15[m
+[32m+[m[32m     - 1-15[m[41m[m
+      - PDP ID[m
+ [m
+    * - pdp_ctx[m
+[36m@@ -357,7 +424,8 @@[m [mqosa_datacall_attach_stat_e枚举值[m
+     qosa_datacall_errno_e qosa_datacall_delete_pdp_context(qosa_uint8_t simid, qosa_uint8_t pdpid)[m
+ [m
+ - 功能描述[m
+[31m-    删除特定PDP的PDP context。[m
+[32m+[m[41m[m
+[32m+[m[32m  删除特定PDP的PDP context。[m[41m[m
+ [m
+ - 参数说明[m
+ [m
+[36m@@ -379,7 +447,7 @@[m [mqosa_datacall_attach_stat_e枚举值[m
+    * - pdpid[m
+      - qosa_uint8_t[m
+      - 是[m
+[31m-     - 0-15[m
+[32m+[m[32m     - 1-15[m[41m[m
+      - PDP ID[m
+ [m
+ [m
+[36m@@ -401,7 +469,8 @@[m [mqosa_datacall_attach_stat_e枚举值[m
+     qosa_datacall_errno_e qosa_datacall_get_pdp_context(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_pdp_context_t* pdp_ctx)[m
+ [m
+ - 功能描述[m
+[31m-    获取特定PDP的PDP context。[m
+[32m+[m[41m[m
+[32m+[m[32m  获取特定PDP的PDP context。用来查询此PDP的IP TYPE，APN等信息。[m[41m[m
+ [m
+ - 参数说明[m
+ [m
+[36m@@ -423,13 +492,13 @@[m [mqosa_datacall_attach_stat_e枚举值[m
+    * - pdpid[m
+      - qosa_uint8_t[m
+      - 是[m
+[31m-     - 0-15[m
+[32m+[m[32m     - 1-15[m[41m[m
+      - PDP ID[m
+ [m
+    * - pdp_ctx[m
+      - qosa_pdp_context_t*[m
+      - 是[m
+[31m-     - 0-15[m
+[32m+[m[32m     - 无[m[41m[m
+      - pdp context[m
+ [m
+ qosa_pdp_context_t结构体含义参考 :ref:`qosa_pdp_context_t`[m
+[36m@@ -452,7 +521,9 @@[m [mqosa_pdp_context_t结构体含义参考 :ref:`qosa_pdp_context_t`[m
+     qosa_datacall_errno_e qosa_datacall_set_pdp_auth(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_pdp_auth_context_t* auth_ctx)[m
+ [m
+ - 功能描述[m
+[31m-    设置特定PDP的PDP auth context。[m
+[32m+[m[41m[m
+[32m+[m[32m  设置特定PDP的PDP auth context。[m[41m[m
+[32m+[m[32m  PDP auth context，用于在建立数据连接时进行身份验证的一组参数。当设备通过蜂窝网络（如PPP拨号或IP连接）接入运营商网络时，可能需要向网络侧提供鉴权信息（如用户名和密码）以验证身份。[m[41m[m
+ [m
+ - 参数说明[m
+ [m
+[36m@@ -474,7 +545,7 @@[m [mqosa_pdp_context_t结构体含义参考 :ref:`qosa_pdp_context_t`[m
+    * - pdpid[m
+      - qosa_uint8_t[m
+      - 是[m
+[31m-     - 0-15[m
+[32m+[m[32m     - 1-15[m[41m[m
+      - PDP ID[m
+ [m
+    * - pdp_ctx[m
+[36m@@ -518,7 +589,8 @@[m [mqosa_pdp_context_t结构体含义参考 :ref:`qosa_pdp_context_t`[m
+     qosa_datacall_errno_e qosa_datacall_get_pdp_auth(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_pdp_auth_context_t* auth_ctx)[m
+ [m
+ - 功能描述[m
+[31m-    获取特定PDP的PDP auth context。[m
+[32m+[m[41m[m
+[32m+[m[32m  获取特定PDP的PDP auth context。用于查询此PDP用于鉴权的用户名、密码以及鉴权类型的鉴权配置。[m[41m[m
+ [m
+ - 参数说明[m
+ [m
+[36m@@ -540,7 +612,7 @@[m [mqosa_pdp_context_t结构体含义参考 :ref:`qosa_pdp_context_t`[m
+    * - pdpid[m
+      - qosa_uint8_t[m
+      - 是[m
+[31m-     - 0-15[m
+[32m+[m[32m     - 1-15[m[41m[m
+      - PDP ID[m
+ [m
+    * - pdp_ctx[m
+[36m@@ -570,7 +642,9 @@[m [mqosa_pdp_auth_context_t结构体含义参考 :ref:`qosa_pdp_auth_context_t`[m
+     qosa_datacall_errno_e qosa_datacall_set_pdp_qos(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_pdp_qos_profile_t* qos_profile)[m
+ [m
+ - 功能描述[m
+[31m-    定义特定PDP的QoS profile。[m
+[32m+[m[41m[m
+[32m+[m[32m  此函数用于定义特定PDP的QoS profile。[m[41m[m
+[32m+[m[32m  QoS profile是用于定义数据连接的服务质量（Quality of Service）的一组参数。它决定了数据传输的优先级、带宽、延迟、可靠性等关键指标，直接影响用户体验和业务质量。[m[41m[m
+ [m
+ - 参数说明[m
+ [m
+[36m@@ -592,7 +666,7 @@[m [mqosa_pdp_auth_context_t结构体含义参考 :ref:`qosa_pdp_auth_context_t`[m
+    * - pdpid[m
+      - qosa_uint8_t[m
+      - 是[m
+[31m-     - 0-15[m
+[32m+[m[32m     - 1-15[m[41m[m
+      - PDP ID[m
+ [m
+    * - qos_profile[m
+[36m@@ -635,7 +709,8 @@[m [mqosa_pdp_auth_context_t结构体含义参考 :ref:`qosa_pdp_auth_context_t`[m
+     qosa_datacall_errno_e qosa_datacall_get_pdp_qos(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_pdp_qos_profile_t* qos_profile)[m
+ [m
+ - 功能描述[m
+[31m-    获取特定PDP的QoS profile.[m
+[32m+[m[41m[m
+[32m+[m[32m  此函数用于查询特定PDP的QoS profile.[m[41m[m
+ [m
+ - 参数说明[m
+ [m
+[36m@@ -657,7 +732,7 @@[m [mqosa_pdp_auth_context_t结构体含义参考 :ref:`qosa_pdp_auth_context_t`[m
+    * - pdpid[m
+      - qosa_uint8_t[m
+      - 是[m
+[31m-     - 0-15[m
+[32m+[m[32m     - 1-15[m[41m[m
+      - PDP ID[m
+ [m
+    * - qos_profile[m
+[36m@@ -679,9 +754,11 @@[m [mqosa_pdp_qos_profile_t结构体含义参考 :ref:`qosa_pdp_qos_profile_t`[m
+     无。[m
+ [m
+ ---------------------[m
+[31m-3 DNS地址的配置和查询[m
+[32m+[m[32m3 DNS的配置和查询[m[41m[m
+ ---------------------[m
+[31m-[m
+[32m+[m[32mDNS（域名系统，Domain Name System），用于将易记的域名（如 www.example.com）解析为计算机能够识别的 IP 地址（如 93.184.216.34）。[m[41m[m
+[32m+[m[32m它是分布式、层级化的数据库系统，保证了海量主机名与 IP 地址之间的高效映射和查找。[m[41m[m
+[32m+[m[32m一般情况下，模组注网成功时，核心网会下发DNS服务器的IP地址给模组，供模组用来解析域名，另外也支持自行配置期望的DNS服务器的IP地址。[m[41m[m
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m
+ 3.1 qosa_datacall_get_dns_addr[m
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m
+[36m@@ -692,7 +769,8 @@[m [mqosa_pdp_qos_profile_t结构体含义参考 :ref:`qosa_pdp_qos_profile_t`[m
+     qosa_datacall_errno_e qosa_datacall_get_dns_addr(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_datacall_dns_t* dns)[m
+ [m
+ - 功能描述[m
+[31m-    获取dns服务器IP地址.[m
+[32m+[m[41m[m
+[32m+[m[32m  此函数用于获取某个PDP配置的dns服务器IP地址.[m[41m[m
+ [m
+ - 参数说明[m
+ [m
+[36m@@ -714,7 +792,7 @@[m [mqosa_pdp_qos_profile_t结构体含义参考 :ref:`qosa_pdp_qos_profile_t`[m
+    * - pdpid[m
+      - qosa_uint8_t[m
+      - 是[m
+[31m-     - 0-15[m
+[32m+[m[32m     - 1-15[m[41m[m
+      - PDP ID[m
+ [m
+    * - dns[m
+[36m@@ -756,7 +834,8 @@[m [mqosa_pdp_qos_profile_t结构体含义参考 :ref:`qosa_pdp_qos_profile_t`[m
+     qosa_datacall_errno_e qosa_datacall_set_dns_addr(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_datacall_dns_t* dns)[m
+ [m
+ - 功能描述[m
+[31m-    设置dns服务器IP地址.[m
+[32m+[m[41m[m
+[32m+[m[32m  此函数用于设置dns服务器IP地址.[m[41m[m
+ [m
+ - 参数说明[m
+ [m
+[36m@@ -778,7 +857,7 @@[m [mqosa_pdp_qos_profile_t结构体含义参考 :ref:`qosa_pdp_qos_profile_t`[m
+    * - pdpid[m
+      - qosa_uint8_t[m
+      - 是[m
+[31m-     - 0-15[m
+[32m+[m[32m     - 1-15[m[41m[m
+      - PDP ID[m
+ [m
+    * - dns[m
+[36m@@ -811,7 +890,8 @@[m [mqosa_datacall_dns_t结构体含义参考 :ref:`qosa_datacall_dns_t`[m
+     qosa_datacall_conn_t qosa_datacall_conn_new(qosa_uint8_t simid, qosa_uint8_t pdpid, qosa_datacall_conn_type_e conn_type)[m
+ [m
+ - 功能描述[m
+[31m-    生成一个特定功能域的连接对象.[m
+[32m+[m[41m[m
+[32m+[m[32m  生成一个特定功能域的连接对象. 此对象可用于后续的数据拨号操作。如果参数非法, 将返回OSA_DATACALL_CONN_INVALID[m[41m[m
+ [m
+ - 参数说明[m
+ [m
+[36m@@ -833,7 +913,7 @@[m [mqosa_datacall_dns_t结构体含义参考 :ref:`qosa_datacall_dns_t`[m
+    * - pdpid[m
+      - qosa_uint8_t[m
+      - 是[m
+[31m-     - 0-15[m
+[32m+[m[32m     - 1-15[m[41m[m
+      - PDP ID[m
+ [m
+    * - conn_type[m
+[36m@@ -874,7 +954,8 @@[m [mqosa_datacall_dns_t结构体含义参考 :ref:`qosa_datacall_dns_t`[m
+     qosa_datacall_errno_e qosa_datacall_start(qosa_datacall_conn_t conn, qosa_uint32_t max_wait_time)[m
+ [m
+ - 功能描述[m
+[31m-    打开特定datacall连接对象(同步).[m
+[32m+[m[41m[m
+[32m+[m[32m  打开特定datacall连接对象(同步).[m[41m[m
+ [m
+ - 参数说明[m
+ [m
+[36m@@ -925,7 +1006,8 @@[m [mqosa_datacall_dns_t结构体含义参考 :ref:`qosa_datacall_dns_t`[m
+     qosa_datacall_errno_e qosa_datacall_start_async(qosa_datacall_conn_t conn, qosa_uint32_t max_wait_time, datacall_callback_cb_ptr cb, void* ctx)[m
+ [m
+ - 功能描述[m
+[31m-    打开特定datacall连接对象(异步接口).[m
+[32m+[m[41m[m
+[32m+[m[32m  打开特定datacall连接对象(异步接口).[m[41m[m
+ [m
+ - 参数说明[m
+ [m
+[36m@@ -988,7 +1070,8 @@[m [mqosa_datacall_dns_t结构体含义参考 :ref:`qosa_datacall_dns_t`[m
+     qosa_datacall_errno_e qosa_datacall_stop(qosa_datacall_conn_t conn, qosa_uint32_t max_wait_time)[m
+ [m
+ - 功能描述[m
+[31m-    关闭特定datacall连接对象(同步接口).[m
+[32m+[m[41m[m
+[32m+[m[32m  关闭特定datacall连接对象(同步接口).[m[41m[m
+ [m
+ - 参数说明[m
+ [m
+[36m@@ -1032,7 +1115,8 @@[m [mqosa_datacall_dns_t结构体含义参考 :ref:`qosa_datacall_dns_t`[m
+     qosa_datacall_errno_e qosa_datacall_stop_async(qosa_datacall_conn_t conn, qosa_uint32_t max_wait_time, datacall_callback_cb_ptr cb, void* ctx)[m
+ [m
+ - 功能描述[m
+[31m-    关闭特定datacall连接对象(异步接口).[m
+[32m+[m[41m[m
+[32m+[m[32m  关闭特定datacall连接对象(异步接口).[m[41m[m
+ [m
+ - 参数说明[m
+ [m
+[36m@@ -1087,7 +1171,8 @@[m [mqosa_datacall_dns_t结构体含义参考 :ref:`qosa_datacall_dns_t`[m
+     qosa_bool_t qosa_datacall_get_status(qosa_datacall_conn_t conn)[m
+ [m
+ - 功能描述[m
+[31m-    获取特定datacall连接对象的连接状态.[m
+[32m+[m[41m[m
+[32m+[m[32m  获取特定datacall连接对象的连接状态.在应用侧使用一个特定的PDP连接前, 可以检查该状态, 如果其已经为连接状态, 表示该连接正在被使用[m[41m[m
+ [m
+ - 参数说明[m
+ [m
+[36m@@ -1126,7 +1211,8 @@[m [mqosa_datacall_dns_t结构体含义参考 :ref:`qosa_datacall_dns_t`[m
+     qosa_datacall_errno_e qosa_datacall_get_ip_info(qosa_datacall_conn_t conn, qosa_datacall_ip_info_t* info)[m
+ [m
+ - 功能描述[m
+[31m-    获取特定datacall连接对象的详细信息.[m
+[32m+[m[41m[m
+[32m+[m[32m  获取特定datacall连接对象的详细信息.如果对应的连接对象没有激活, 将返回空的IP地址[m[41m[m
+ [m
+ - 参数说明[m
+ [m
+[36m@@ -1174,7 +1260,8 @@[m [mqosa_datacall_dns_t结构体含义参考 :ref:`qosa_datacall_dns_t`[m
+     qosa_datacall_errno_e qosa_datacall_get_traffic_statistics(qosa_uint8_t simid, qosa_datacall_traffic_statistics_t* traffic_statistics)[m
+ [m
+ - 功能描述[m
+[31m-    获取上下行流量统计信息.[m
+[32m+[m[41m[m
+[32m+[m[32m  获取上下行流量统计信息.[m[41m[m
+ [m
+ - 参数说明[m
+ [m
+[36m@@ -1231,7 +1318,8 @@[m [mqosa_datacall_dns_t结构体含义参考 :ref:`qosa_datacall_dns_t`[m
+     qosa_datacall_errno_e qosa_datacall_clear_traffic_statistics(qosa_uint8_t simid)[m
+ [m
+ - 功能描述[m
+[31m-    清除上下行流量统计信息.[m
+[32m+[m[41m[m
+[32m+[m[32m  清除上下行流量统计信息.[m[41m[m
+ [m
+ - 参数说明[m
+ [m
+[36m@@ -1270,7 +1358,8 @@[m [mqosa_datacall_dns_t结构体含义参考 :ref:`qosa_datacall_dns_t`[m
+     qosa_datacall_errno_e qosa_datacall_save_traffic_statistics(qosa_uint8_t simid)[m
+ [m
+ - 功能描述[m
+[31m-    保存上下行流量信息到NV中.[m
+[32m+[m[41m[m
+[32m+[m[32m  保存上下行流量信息到NV中.[m[41m[m
+ [m
+ - 参数说明[m
+ [m
+[36m@@ -1311,7 +1400,8 @@[m [mqosa_datacall_dns_t结构体含义参考 :ref:`qosa_datacall_dns_t`[m
+     qosa_datacall_errno_e qosa_datacall_set_pdp_timer(qosa_uint8_t simid, qosa_uint8_t rat, qosa_uint8_t procedure, qosa_datacall_pdp_timer_t* pdp_timer)[m
+ [m
+ - 功能描述[m
+[31m-    配置PDP激活/去激活定时器配置.[m
+[32m+[m[41m[m
+[32m+[m[32m  配置PDP激活/去激活定时器配置.[m[41m[m
+ [m
+ - 参数说明[m
+ [m
+[36m@@ -1394,7 +1484,8 @@[m [mqosa_datacall_dns_t结构体含义参考 :ref:`qosa_datacall_dns_t`[m
+     qosa_datacall_errno_e qosa_datacall_get_pdp_timer(qosa_uint8_t simid, qosa_uint8_t rat, qosa_uint8_t procedure, qosa_datacall_pdp_timer_t* pdp_timer)[m
+ [m
+ - 功能描述[m
+[31m-    获取PDP激活/去激活定时器配置信息.[m
+[32m+[m[41m[m
+[32m+[m[32m  获取PDP激活/去激活定时器配置信息.[m[41m[m
+ [m
+ - 参数说明[m
+ [m
+[36m@@ -1441,4 +1532,284 @@[m [mqosa_datacall_pdp_act_opt_e结构体含义参考 :ref:`qosa_datacall_pdp_act_opt[m
+ [m
+ - 使用注意事项[m
+ [m
+[31m-    无。[m
+\ No newline at end of file[m
+[32m+[m[32m    无。[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m-----------------------[m[41m[m
+[32m+[m[32m示例 Demo 与流程图[m[41m[m
+[32m+[m[32m-----------------------[m[41m[m
+[32m+[m[32mdatacall示例程序展示了QuecOS的datacall功能[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m.. image:: https://knowledge.quectel.com/pages/viewpage.action?pageId=331772120&preview=/331772120/334204553/datacall%20demo.png[m[41m[m
+[32m+[m[32m   :alt: demo流程图[m[41m[m
+[32m+[m[32m   :width: 200px[m[41m[m
+[32m+[m[32m   :align: center[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m.. code-block:: c[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m    #include "qosa_def.h"[m[41m[m
+[32m+[m[32m    #include "qosa_log.h"[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m    #include "qosa_network.h"[m[41m[m
+[32m+[m[32m    #include "qosa_datacall.h"[m[41m[m
+[32m+[m[32m    #include "qosa_platform_cfg.h"[m[41m[m
+[32m+[m[32m    #include "qosa_ip_addr.h"[m[41m[m
+[32m+[m[32m    #include "qosa_event_notify.h"[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m    #define log_e(...)                                QOSA_LOG_E(LOG_TAG_MODEM, ##__VA_ARGS__)[m[41m[m
+[32m+[m[32m    #define log_w(...)                                QOSA_LOG_W(LOG_TAG_MODEM, ##__VA_ARGS__)[m[41m[m
+[32m+[m[32m    #define log_i(...)                                QOSA_LOG_I(LOG_TAG_MODEM, ##__VA_ARGS__)[m[41m[m
+[32m+[m[32m    #define log_d(...)                                QOSA_LOG_D(LOG_TAG_MODEM, ##__VA_ARGS__)[m[41m[m
+[32m+[m[32m    #define log_v(...)                                QOSA_LOG_V(LOG_TAG_MODEM, ##__VA_ARGS__)[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m    #define DATACALL_DEMO_WAIT_ATTACH_MAX_WAIT_TIME   300[m[41m[m
+[32m+[m[32m    #define DATACALL_DEMO_WAIT_DATACALL_MAX_WAIT_TIME 120[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m    qosa_task_t g_datacall_demo_task = QOSA_NULL;[m[41m[m
+[32m+[m[32m    qosa_msgq_t g_datacall_demo_msgq = QOSA_NULL;[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m    typedef enum[m[41m[m
+[32m+[m[32m    {[m[41m[m
+[32m+[m[32m        DATACALL_NW_DEACT_MSG,[m[41m[m
+[32m+[m[32m    } datacall_demo_msg_e;[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m    typedef struct[m[41m[m
+[32m+[m[32m    {[m[41m[m
+[32m+[m[32m        datacall_demo_msg_e msgid; /**< datacall demo message type */[m[41m[m
+[32m+[m[32m        void               *argv;[m[41m[m
+[32m+[m[32m    } datacall_demo_msg_t;[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m    typedef struct[m[41m[m
+[32m+[m[32m    {[m[41m[m
+[32m+[m[32m        qosa_uint8_t simid; /**< SIM identification */[m[41m[m
+[32m+[m[32m        qosa_uint8_t pdpid; /**< PDP identification */[m[41m[m
+[32m+[m[32m    } datacall_demo_pdp_deact_ind_t;[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m    int datacall_nw_deact_pdp_cb(void *user_argv, void *argv)[m[41m[m
+[32m+[m[32m    {[m[41m[m
+[32m+[m[32m        QOSA_UNUSED(user_argv);[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        datacall_demo_pdp_deact_ind_t *deact_ptr = QOSA_NULL;[m[41m[m
+[32m+[m[32m        datacall_demo_msg_t            datacall_nw_deact_msg = {0};[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        //get nw deact report params[m[41m[m
+[32m+[m[32m        qosa_datacall_nw_deact_event_t *pdp_deatch_event = (qosa_datacall_nw_deact_event_t *)argv;[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        log_i("enter,simid=%d,pdpid=%d", pdp_deatch_event->simid, pdp_deatch_event->pdpid);[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        // melloc memory[m[41m[m
+[32m+[m[32m        deact_ptr = (datacall_demo_pdp_deact_ind_t *)qosa_malloc(sizeof(datacall_demo_pdp_deact_ind_t));[m[41m[m
+[32m+[m[32m        if (deact_ptr == QOSA_NULL)  // if melloc fail ,return[m[41m[m
+[32m+[m[32m        {[m[41m[m
+[32m+[m[32m            return 0;[m[41m[m
+[32m+[m[32m        }[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        deact_ptr->simid = pdp_deatch_event->simid;[m[41m[m
+[32m+[m[32m        deact_ptr->pdpid = pdp_deatch_event->pdpid;[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        // Preparing to send messages to the message queue[m[41m[m
+[32m+[m[32m        datacall_nw_deact_msg.msgid = DATACALL_NW_DEACT_MSG;[m[41m[m
+[32m+[m[32m        datacall_nw_deact_msg.argv = deact_ptr;[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        qosa_msgq_release(g_datacall_demo_msgq, sizeof(datacall_demo_msg_t), (qosa_uint8_t *)&datacall_nw_deact_msg, QOSA_NO_WAIT);[m[41m[m
+[32m+[m[32m        return 0;[m[41m[m
+[32m+[m[32m    }[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m    static void datacall_demo_task(void *arg)[m[41m[m
+[32m+[m[32m    {[m[41m[m
+[32m+[m[32m        int                     ret = 0;[m[41m[m
+[32m+[m[32m        int                     retry_count = 0;[m[41m[m
+[32m+[m[32m        uint8_t                 simid = 0;[m[41m[m
+[32m+[m[32m        int                     profile_idx = 1;[m[41m[m
+[32m+[m[32m        qosa_datacall_conn_t    conn;[m[41m[m
+[32m+[m[32m        qosa_bool_t             datacall_status = QOSA_FALSE;[m[41m[m
+[32m+[m[32m        qosa_datacall_ip_info_t info = {0};[m[41m[m
+[32m+[m[32m        datacall_demo_msg_t     datacall_task_msg = {0};[m[41m[m
+[32m+[m[32m        qosa_pdp_context_t      pdp_ctx = {0};[m[41m[m
+[32m+[m[32m        qosa_bool_t             is_attached = QOSA_FALSE;[m[41m[m
+[32m+[m[32m        char                    ip4addr_buf[CONFIG_QOSA_INET_ADDRSTRLEN] = {0};[m[41m[m
+[32m+[m[32m        char                    ip6addr_buf[CONFIG_QOSA_INET6_ADDRSTRLEN] = {0};[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        //create message queue[m[41m[m
+[32m+[m[32m        ret = qosa_msgq_create(&g_datacall_demo_msgq, sizeof(datacall_demo_msg_t), 20);[m[41m[m
+[32m+[m[32m        log_i("create msgq result=%d", ret);[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        qosa_task_sleep_sec(3);[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        //if attach is successful before the maxtime timeout, it will immediately return QOSA_TRUE and enter second while loop[m[41m[m
+[32m+[m[32m        //Otherwise, it will block until timeout and returning QOSA_FALSE and enter first while loop[m[41m[m
+[32m+[m[32m        is_attached = qosa_datacall_wait_attached(simid, DATACALL_DEMO_WAIT_ATTACH_MAX_WAIT_TIME);[m[41m[m
+[32m+[m[32m        if (!is_attached)[m[41m[m
+[32m+[m[32m        {[m[41m[m
+[32m+[m[32m            log_i("attach fail");[m[41m[m
+[32m+[m[32m            goto exit;[m[41m[m
+[32m+[m[32m        }[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        //register network pdn deactive event callback[m[41m[m
+[32m+[m[32m        qosa_event_notify_register(QOSA_EVENT_NW_PDN_DEACT, datacall_nw_deact_pdp_cb, QOSA_NULL);[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        //config pdp context:APN, iptype[m[41m[m
+[32m+[m[32m        //If the operator has restrictions on the APN during registration, needs to be set the APN provided by the operator[m[41m[m
+[32m+[m[32m        const char *apn_str = "test";[m[41m[m
+[32m+[m[32m        pdp_ctx.apn_valid = QOSA_TRUE;[m[41m[m
+[32m+[m[32m        pdp_ctx.pdp_type = QOSA_PDP_TYPE_IP;  //ipv4[m[41m[m
+[32m+[m[32m        if (pdp_ctx.apn_valid)[m[41m[m
+[32m+[m[32m        {[m[41m[m
+[32m+[m[32m            qosa_memcpy(pdp_ctx.apn, apn_str, qosa_strlen(apn_str));[m[41m[m
+[32m+[m[32m        }[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        ret = qosa_datacall_set_pdp_context(simid, profile_idx, &pdp_ctx);[m[41m[m
+[32m+[m[32m        log_i("set pdp context, ret=%d", ret);[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        //create datacall object[m[41m[m
+[32m+[m[32m        conn = qosa_datacall_conn_new(simid, profile_idx, QOSA_DATACALL_CONN_TCPIP);[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        //start excute datacall(sync)[m[41m[m
+[32m+[m[32m        ret = qosa_datacall_start(conn, DATACALL_DEMO_WAIT_DATACALL_MAX_WAIT_TIME);[m[41m[m
+[32m+[m[32m        if (ret != QOSA_DATACALL_OK)[m[41m[m
+[32m+[m[32m        {[m[41m[m
+[32m+[m[32m            log_i("datacall fail ,ret=%d", ret);[m[41m[m
+[32m+[m[32m            goto exit;[m[41m[m
+[32m+[m[32m        }[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        //get datacall status(0: deactive 1:active)[m[41m[m
+[32m+[m[32m        datacall_status = qosa_datacall_get_status(conn);[m[41m[m
+[32m+[m[32m        log_i("datacall status=%d", datacall_status);[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        //get ip info from datacall[m[41m[m
+[32m+[m[32m        ret = qosa_datacall_get_ip_info(conn, &info);[m[41m[m
+[32m+[m[32m        log_i("pdpid=%d,simid=%d", info.simcid.pdpid, info.simcid.simid);[m[41m[m
+[32m+[m[32m        log_i("ip_type=%d", info.ip_type);[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        if (info.ip_type == QOSA_PDP_IPV4)[m[41m[m
+[32m+[m[32m        {[m[41m[m
+[32m+[m[32m            //ipv4 info[m[41m[m
+[32m+[m[32m            qosa_memset(ip4addr_buf, 0, sizeof(ip4addr_buf));[m[41m[m
+[32m+[m[32m            qosa_ip_addr_inet_ntop(QOSA_IP_ADDR_AF_INET, &info.ipv4_ip.addr.ipv4_addr, ip4addr_buf, sizeof(ip4addr_buf));[m[41m[m
+[32m+[m[32m            log_i("ipv4 addr:%s", ip4addr_buf);[m[41m[m
+[32m+[m[32m        }[m[41m[m
+[32m+[m[32m        else if (info.ip_type == QOSA_PDP_IPV6)[m[41m[m
+[32m+[m[32m        {[m[41m[m
+[32m+[m[32m            //ipv6 info[m[41m[m
+[32m+[m[32m            qosa_memset(ip6addr_buf, 0, sizeof(ip6addr_buf));[m[41m[m
+[32m+[m[32m            qosa_ip_addr_inet_ntop(QOSA_IP_ADDR_AF_INET6, &info.ipv6_ip.addr.ipv6_addr, ip6addr_buf, sizeof(ip6addr_buf));[m[41m[m
+[32m+[m[32m            log_i("ipv6 addr:%s", ip6addr_buf);[m[41m[m
+[32m+[m[32m        }[m[41m[m
+[32m+[m[32m        else[m[41m[m
+[32m+[m[32m        {[m[41m[m
+[32m+[m[32m            //ipv4 and ipv6 info[m[41m[m
+[32m+[m[32m            qosa_memset(ip4addr_buf, 0, sizeof(ip4addr_buf));[m[41m[m
+[32m+[m[32m            qosa_ip_addr_inet_ntop(QOSA_IP_ADDR_AF_INET, &info.ipv4_ip.addr.ipv4_addr, ip4addr_buf, sizeof(ip4addr_buf));[m[41m[m
+[32m+[m[32m            log_i("ipv4 addr:%s", ip4addr_buf);[m[41m[m
+[32m+[m[32m            qosa_memset(ip6addr_buf, 0, sizeof(ip6addr_buf));[m[41m[m
+[32m+[m[32m            qosa_ip_addr_inet_ntop(QOSA_IP_ADDR_AF_INET6, &info.ipv6_ip.addr.ipv6_addr, ip6addr_buf, sizeof(ip6addr_buf));[m[41m[m
+[32m+[m[32m            log_i("ipv6 addr:%s", ip6addr_buf);[m[41m[m
+[32m+[m[32m        }[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        while (1)[m[41m[m
+[32m+[m[32m        {[m[41m[m
+[32m+[m[32m            ret = qosa_msgq_wait(g_datacall_demo_msgq, (qosa_uint8_t *)&datacall_task_msg, sizeof(datacall_demo_msg_t), QOSA_WAIT_FOREVER);[m[41m[m
+[32m+[m[32m            if (ret != 0)[m[41m[m
+[32m+[m[32m                continue;[m[41m[m
+[32m+[m[32m            log_i("enter datacall demo task, msgid=%d", datacall_task_msg.msgid);[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m            switch (datacall_task_msg.msgid)[m[41m[m
+[32m+[m[32m            {[m[41m[m
+[32m+[m[32m                case DATACALL_NW_DEACT_MSG: {[m[41m[m
+[32m+[m[32m                    qosa_datacall_nw_deact_event_t *pdp_deatch_event = (qosa_datacall_nw_deact_event_t *)datacall_task_msg.argv;[m[41m[m
+[32m+[m[32m                    log_i("simid=%d,deact pdpid=%d", pdp_deatch_event->simid, pdp_deatch_event->pdpid);[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m                    //Try reactive 10 times, time interval is 20 seconds[m[41m[m
+[32m+[m[32m                    while (((ret = qosa_datacall_start(conn, DATACALL_DEMO_WAIT_DATACALL_MAX_WAIT_TIME)) != QOSA_DATACALL_OK) && (retry_count < 10))[m[41m[m
+[32m+[m[32m                    {[m[41m[m
+[32m+[m[32m                        retry_count++;[m[41m[m
+[32m+[m[32m                        log_i("datacall fail, the retry count is %d", retry_count);[m[41m[m
+[32m+[m[32m                        qosa_task_sleep_sec(20);[m[41m[m
+[32m+[m[32m                    }[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m                    if (ret == QOSA_DATACALL_OK)[m[41m[m
+[32m+[m[32m                    {[m[41m[m
+[32m+[m[32m                        retry_count = 0;[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m                        //get datacall status(0: deactive 1:active)[m[41m[m
+[32m+[m[32m                        datacall_status = qosa_datacall_get_status(conn);[m[41m[m
+[32m+[m[32m                        log_i("datacall status=%d", datacall_status);[m[41m[m
+[32m+[m[32m                        //get ip info from datacall[m[41m[m
+[32m+[m[32m                        ret = qosa_datacall_get_ip_info(conn, &info);[m[41m[m
+[32m+[m[32m                        log_i("pdpid=%d,simid=%d", info.simcid.pdpid, info.simcid.simid);[m[41m[m
+[32m+[m[32m                        log_i("ip type=%d", info.ip_type);[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m                        char ip4addr_buf[CONFIG_QOSA_INET_ADDRSTRLEN] = {0};[m[41m[m
+[32m+[m[32m                        char ip6addr_buf[CONFIG_QOSA_INET6_ADDRSTRLEN] = {0};[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m                        if (info.ip_type == QOSA_PDP_IPV4)[m[41m[m
+[32m+[m[32m                        {[m[41m[m
+[32m+[m[32m                            qosa_memset(ip4addr_buf, 0, sizeof(ip4addr_buf));[m[41m[m
+[32m+[m[32m                            qosa_ip_addr_inet_ntop(QOSA_IP_ADDR_AF_INET, &info.ipv4_ip.addr.ipv4_addr, ip4addr_buf, sizeof(ip4addr_buf));[m[41m[m
+[32m+[m[32m                            log_i("ipv4 addr:%s", ip4addr_buf);[m[41m[m
+[32m+[m[32m                        }[m[41m[m
+[32m+[m[32m                        else if (info.ip_type == QOSA_PDP_IPV6)[m[41m[m
+[32m+[m[32m                        {[m[41m[m
+[32m+[m[32m                            qosa_memset(ip6addr_buf, 0, sizeof(ip6addr_buf));[m[41m[m
+[32m+[m[32m                            qosa_ip_addr_inet_ntop(QOSA_IP_ADDR_AF_INET6, &info.ipv6_ip.addr.ipv6_addr, ip6addr_buf, sizeof(ip6addr_buf));[m[41m[m
+[32m+[m[32m                            log_i("ipv6 addr:%s", ip6addr_buf);[m[41m[m
+[32m+[m[32m                        }[m[41m[m
+[32m+[m[32m                        else[m[41m[m
+[32m+[m[32m                        {[m[41m[m
+[32m+[m[32m                            qosa_memset(ip4addr_buf, 0, sizeof(ip4addr_buf));[m[41m[m
+[32m+[m[32m                            qosa_ip_addr_inet_ntop(QOSA_IP_ADDR_AF_INET, &info.ipv4_ip.addr.ipv4_addr, ip4addr_buf, sizeof(ip4addr_buf));[m[41m[m
+[32m+[m[32m                            log_i("ipv4 addr:%s", ip4addr_buf);[m[41m[m
+[32m+[m[32m                            qosa_memset(ip6addr_buf, 0, sizeof(ip6addr_buf));[m[41m[m
+[32m+[m[32m                            qosa_ip_addr_inet_ntop(QOSA_IP_ADDR_AF_INET6, &info.ipv6_ip.addr.ipv6_addr, ip6addr_buf, sizeof(ip6addr_buf));[m[41m[m
+[32m+[m[32m                            log_i("ipv6 addr:%s", ip6addr_buf);[m[41m[m
+[32m+[m[32m                        }[m[41m[m
+[32m+[m[32m                    }[m[41m[m
+[32m+[m[32m                    else[m[41m[m
+[32m+[m[32m                    {[m[41m[m
+[32m+[m[32m                        log_i("datacall fail in nw deact pdn event");[m[41m[m
+[32m+[m[32m                    }[m[41m[m
+[32m+[m[32m                    qosa_free(datacall_task_msg.argv);[m[41m[m
+[32m+[m[32m                }[m[41m[m
+[32m+[m[32m                break;[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m                default:[m[41m[m
+[32m+[m[32m                    break;[m[41m[m
+[32m+[m[32m            }[m[41m[m
+[32m+[m[32m        }[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m    exit:[m[41m[m
+[32m+[m[32m        //unregister network pdn deactive event callback[m[41m[m
+[32m+[m[32m        qosa_event_notify_unregister(QOSA_EVENT_NW_PDN_DEACT, datacall_nw_deact_pdp_cb);[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        //delete msgqueue and task[m[41m[m
+[32m+[m[32m        qosa_msgq_delete(g_datacall_demo_msgq);[m[41m[m
+[32m+[m[32m        qosa_task_delete(g_datacall_demo_task);[m[41m[m
+[32m+[m[32m    }[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m    void datacall_demo_init(void)[m[41m[m
+[32m+[m[32m    {[m[41m[m
+[32m+[m[32m        int err = 0;[m[41m[m
+[32m+[m[32m        //create datacall demo main task[m[41m[m
+[32m+[m[32m        err = qosa_task_create(&g_datacall_demo_task, 4 * 1024, QOSA_PRIORITY_NORMAL, "QDATACALLDEMO", datacall_demo_task, QOSA_NULL);[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        if (err != QOSA_OK)[m[41m[m
+[32m+[m[32m        {[m[41m[m
+[32m+[m[32m            log_d("datacall_demo task create error");[m[41m[m
+[32m+[m[32m            return;[m[41m[m
+[32m+[m[32m        }[m[41m[m
+[32m+[m[32m    }[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m说明：[m[41m[m
+[32m+[m[32m1. 创建消息队列[m[41m  [m
+[32m+[m[32m2. 阻塞等待注网成功[m[41m  [m
+[32m+[m[32m3. 注册网络事件的回调函数[m[41m  [m
+[32m+[m[32m4. 配置pdp context[m[41m  [m
+[32m+[m[32m5. 创建datacall对象[m[41m  [m
+[32m+[m[32m6. 开始datacall[m[41m  [m
+[32m+[m[32m7. 获取当前的datacall对象的状态是否成功[m[41m  [m
+[32m+[m[32m8. 获取当前的datacall对象获取的IP信息[m[41m  [m
+[32m+[m[32m9. 阻塞task，如果网络去激活pdp事件触发，则会发送网络去激活pdp的消息到task中[m[41m  [m
+[32m+[m[32m10. 重试datacall激活流程直到成功，最大次数10次[m[41m  [m
+[32m+[m[32m11. 如果datacall成功，则获取当前的datacall对象的状态和获取的IP信息[m[41m  [m
+[32m+[m[32m12. 回到9[m[41m  [m
+[41m+[m
+[41m+[m
