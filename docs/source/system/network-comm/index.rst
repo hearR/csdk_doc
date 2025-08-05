@@ -195,6 +195,8 @@ DataCall 函数列表
 
     函数执行成功返回 ``QOSA_DATACALL_OK``，否则返回其他qosa_datacall_errno_e枚举类型的枚举值。
 
+.. _qosa_datacall_errno_e:
+
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1.1.2 qosa_datacall_errno_e
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -219,10 +221,6 @@ DataCall 函数列表
 - 使用注意事项
 
     该函数为异步函数。
-
-.. _qosa_datacall_errno_e:
-
-
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 1.2 qosa_datacall_wait_attached
@@ -759,6 +757,7 @@ qosa_pdp_qos_profile_t结构体含义参考 :ref:`qosa_pdp_qos_profile_t`
 DNS（域名系统，Domain Name System），用于将易记的域名（如 www.example.com）解析为计算机能够识别的 IP 地址（如 93.184.216.34）。
 它是分布式、层级化的数据库系统，保证了海量主机名与 IP 地址之间的高效映射和查找。
 一般情况下，模组注网成功时，核心网会下发DNS服务器的IP地址给模组，供模组用来解析域名，另外也支持自行配置期望的DNS服务器的IP地址。
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 3.1 qosa_datacall_get_dns_addr
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1539,10 +1538,10 @@ qosa_datacall_pdp_act_opt_e结构体含义参考 :ref:`qosa_datacall_pdp_act_opt
 -----------------------
 datacall示例程序展示了QuecOS的datacall功能
 
-.. image:: https://knowledge.quectel.com/pages/viewpage.action?pageId=331772120&preview=/331772120/334204553/datacall%20demo.png
-   :alt: demo流程图
-   :width: 200px
+.. image:: ../images/quecos-datacall-demo-workflow.png
    :align: center
+   :alt: datacall demo流程图
+   :figclass: align-center
 
 .. code-block:: c
 
