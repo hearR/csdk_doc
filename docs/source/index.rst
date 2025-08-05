@@ -5,6 +5,6 @@ Welcome to QuecOS documentation!
    :maxdepth: 2
    :caption: 目录
 
+   started/index
    system/index
    components/index
-   started/index
